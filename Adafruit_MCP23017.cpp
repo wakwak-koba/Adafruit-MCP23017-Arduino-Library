@@ -209,6 +209,38 @@ uint8_t Adafruit_MCP23017::digitalRead(uint8_t pin) {
 }
 
 /**
+ * Sets the pin mode to either INPUT or OUTPUT
+ * Parameter b should be 0 for GPIOA, and 1 for GPIOB.
+*/
+void Adafruit_MCP23017::portMode(uint8_t b, uint8_t d) {
+	uint8_t bValue = 0;
+	if(d == INPUT)
+		bValue = 0xff;
+	
+	if (b == 0)
+		writeRegister(MCP23017_IODIRA, bValue);
+	else
+		writeRegister(MCP23017_IODIRB, bValue);
+}
+
+/**
+ * Write a single port, A or B
+ * Parameter b should be 0 for GPIOA, and 1 for GPIOB.
+ */
+void Adafruit_MCP23017::writeGPIO(uint8_t b, uint8_t d) {
+
+	// read the current GPIO output latches
+	Wire.beginTransmission(MCP23017_ADDRESS | i2caddr);
+	if (b == 0)
+		wiresend(MCP23017_GPIOA);
+	else {
+		wiresend(MCP23017_GPIOB);
+	}
+	wiresend(d);
+	Wire.endTransmission();
+}
+
+/**
  * Configures the interrupt system. both port A and B are assigned the same configuration.
  * Mirroring will OR both INTA and INTB pins.
  * Opendrain will set the INT pin to value or open drain.

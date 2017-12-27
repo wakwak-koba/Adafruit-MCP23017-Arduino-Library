@@ -47,6 +47,10 @@ public:
   uint8_t getLastInterruptPin();
   uint8_t getLastInterruptPinValue();
 
+  void portMode(uint8_t p, uint8_t d);		// wakwak_koba
+  void writeGPIO(uint8_t b, uint8_t d);		// wakwak_koba
+
+
  private:
   uint8_t i2caddr;
 
